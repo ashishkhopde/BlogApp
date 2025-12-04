@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Heart, MessageCircle, Share2 } from "lucide-react";
+import { Heart } from "lucide-react";
 import axios from "axios";
 
 export default function Feed() {
-
   const user = JSON.parse(localStorage.getItem("user"));
-
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     async function getPosts() {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/post${user ? `/feed?user=${user.id}` : ""}`);
-      setPosts(res.data.posts)
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/post${user ? `/feed?user=${user.id}` : ""}`
+      );
+      setPosts(res.data.posts);
     }
     getPosts();
-  }, [])
-
+  }, []);
 
   return (
     <div className="min-h-screen bg-black text-white px-6 py-10">
@@ -54,25 +53,16 @@ export default function Feed() {
                     alt={post?.user?.name || "Unknown User"}
                     className="w-8 h-8 rounded-full"
                   />
-
                   <span>{post?.user?.name || "Unknown User"}</span>
                 </div>
                 <span>{new Date(post.createdAt).toLocaleDateString()}</span>
               </div>
 
-              {/* Actions */}
-              <div className="flex items-center justify-around border-t border-gray-700 pt-3 text-gray-400">
+              {/* Saved Option Only */}
+              <div className="flex items-center justify-center border-t border-gray-700 pt-3 text-gray-400">
                 <button className="flex items-center space-x-2 hover:text-pink-400 transition">
                   <Heart className="w-5 h-5" />
-                  <span>{post.likes}</span>
-                </button>
-                <button className="flex items-center space-x-2 hover:text-blue-400 transition">
-                  <MessageCircle className="w-5 h-5" />
-                  <span>{post.comments}</span>
-                </button>
-                <button className="flex items-center space-x-2 hover:text-green-400 transition">
-                  <Share2 className="w-5 h-5" />
-                  <span>Share</span>
+                  <span>Save</span>
                 </button>
               </div>
             </div>
